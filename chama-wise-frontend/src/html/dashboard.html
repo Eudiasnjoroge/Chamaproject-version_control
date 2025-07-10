@@ -1,0 +1,410 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chamawise - Group Savings Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="dashboard-container">
+    
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>Chamawise</h1>
+        <p>Group Savings Manager</p>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-section="dashboard">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-section="groups">
+          <i class="fas fa-users"></i>
+          <span>My Groups</span>
+        </a>
+        <a href="#" class="nav-item" data-section="contributions">
+          <i class="fas fa-hand-holding-usd"></i>
+          <span>Contributions</span>
+        </a>
+        <a href="#" class="nav-item" data-section="activity">
+          <i class="fas fa-bell"></i>
+          <span>Activity Feed</span>
+        </a>
+        <a href="#" class="nav-item" data-section="reports">
+          <i class="fas fa-chart-line"></i>
+          <span>Reports</span>
+        </a>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <button id="logout" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+
+    <main class="main-content">
+      
+      <header class="top-bar">
+        <div class="user-info">
+          <div class="avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div>
+            <h3>Welcome, <span id="user-name"></span></h3>
+            <small id="user-email"></small>
+          </div>
+        </div>
+        <div class="quick-stats">
+          <div class="stat-card">
+            <i class="fas fa-users"></i>
+            <span id="groups-count">0</span>
+            <small>Groups</small>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-coins"></i>
+            <span id="total-contributions">0</span>
+            <small>Total Contributed</small>
+          </div>
+        </div>
+      </header>
+
+
+      <section id="dashboard-section" class="content-section active">
+        <div class="section-header">
+          <h2><i class="fas fa-tachometer-alt"></i> Dashboard Overview</h2>
+          <div class="section-actions">
+            <button id="show-group-form" class="btn-primary">
+              <i class="fas fa-plus"></i> Create Group
+            </button>
+          </div>
+        </div>
+        
+        <div class="dashboard-grid">
+         
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fas fa-users"></i> My Groups</h3>
+              <a href="#" class="view-all" data-section="groups">View All</a>
+            </div>
+            <div id="groups-list" class="card-body groups-preview"></div>
+          </div>
+          
+       
+  <div class="card">
+  <div class="card-header">
+    <h3><i class="fas fa-chart-pie"></i> How Chamas Help</h3>
+  </div>
+  <div class="card-body">
+    <canvas id="chamaChart" width="400" height="400"></canvas>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById('chamaChart').getContext('2d');
+  const chamaChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['Savings', 'Loans', 'Emergency Fund', 'Business Support', 'Education Support'],
+      datasets: [{
+        label: 'Chama Benefits',
+        data: [30, 25, 15, 20, 10], // percentages
+        backgroundColor: ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0', '#F44336'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return `${context.label}: ${context.raw}%`;
+            }
+          }
+        }
+      }
+    }
+  });
+</script>
+
+          
+<div class="card mt-4 savings-trend-card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h3><i class="fas fa-chart-bar"></i> Monthly Savings Trend</h3>
+    <a href="#" class="view-all" data-section="savings">View Breakdown</a>
+  </div>
+  <div class="card-body">
+    <canvas id="savingsChart" height="250"></canvas>
+  </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctxSavings = document.getElementById('savingsChart').getContext('2d');
+  const savingsChart = new Chart(ctxSavings, {
+    type: 'bar',
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+      datasets: [{
+        label: 'Total Savings (KES)',
+        data: [10000, 15000, 18000, 22000, 25000, 30000, 42500],
+        backgroundColor: '#4CAF50',
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          callbacks: {
+            label: (context) => `KES ${context.raw.toLocaleString()}`
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: function(value) {
+              return 'KES ' + value.toLocaleString();
+            }
+          },
+          title: {
+            display: true,
+            text: 'Amount in KES'
+          }
+        }
+      }
+    }
+  });
+</script>
+
+
+     
+      <section id="groups-section" class="content-section">
+        <div class="section-header">
+          <h2><i class="fas fa-users"></i> My Groups</h2>
+          <div class="section-actions">
+            <button id="show-group-form" class="btn-primary">
+              <i class="fas fa-plus"></i> Create Group
+            </button>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-body">
+            <div id="groups-list-full"></div>
+          </div>
+        </div>
+      </section>
+
+
+      <section id="contributions-section" class="content-section">
+        <div class="section-header">
+          <h2><i class="fas fa-hand-holding-usd"></i> Contributions</h2>
+        </div>
+        
+        <div class="card">
+          <div class="card-header">
+            <h3>Make a Contribution</h3>
+          </div>
+          <div class="card-body">
+            <form id="contribution-form" class="form-grid">
+              <div class="form-group">
+                <label for="contribution-group-id"><i class="fas fa-users"></i> Select Group</label>
+                <select id="contribution-group-id" class="form-control" required>
+                  <option disabled selected>Select a group</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="contribution-amount"><i class="fas fa-money-bill-wave"></i> Amount (Ksh)</label>
+                <input id="contribution-amount" type="number" class="form-control" placeholder="Enter amount" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="contribution-proof"><i class="fas fa-receipt"></i> Proof (Optional)</label>
+                <input id="contribution-proof" class="form-control" placeholder="Payment reference or receipt number">
+              </div>
+              
+              <div class="form-actions">
+                <button type="submit" id="submit-contribution" class="btn-primary">
+                  <i class="fas fa-check-circle"></i> Submit Contribution
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-header">
+            <h3>My Contribution History</h3>
+          </div>
+          <div id="contribution-history" class="card-body">
+           
+          </div>
+        </div>
+      </section>
+
+<section id="activity-section" class="content-section">
+  <div class="section-header">
+    <h2><i class="fas fa-bell"></i> Getting Started with Chamawise</h2>
+  </div>
+
+  <div class="card">
+    <div id="feed-container-full" class="card-body activity-feed">
+    
+    </div>
+  </div>
+</section>
+
+
+<style>
+  .activity-feed {
+  max-height: 350px;
+  overflow-y: auto;
+  padding: 15px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 15px;
+  color: #444;
+}
+
+.feed-item {
+  padding: 10px 0;
+  border-bottom: 1px dashed #ccc;
+  transition: background-color 0.2s;
+}
+
+.feed-item:hover {
+  background-color: #f5f5f5;
+}
+
+</style>
+
+
+     
+      <div id="group-modal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3><i class="fas fa-users"></i> Create New Group</h3>
+            <button class="close-modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form id="group-form" class="form-grid">
+              <div class="form-group">
+                <label for="group-name"><i class="fas fa-tag"></i> Group Name</label>
+                <input id="group-name" class="form-control" placeholder="Enter group name" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="group-description"><i class="fas fa-align-left"></i> Description</label>
+                <textarea id="group-description" class="form-control" placeholder="Brief description of the group"></textarea>
+              </div>
+              
+              <div class="form-group">
+                <label for="group-goal"><i class="fas fa-bullseye"></i> Goal</label>
+                <input id="group-goal" class="form-control" placeholder="Group's primary goal">
+              </div>
+              
+              <div class="form-group">
+                <label for="group-target"><i class="fas fa-money-bill-wave"></i> Target Amount (Ksh)</label>
+                <input id="group-target" type="number" class="form-control" placeholder="Total target amount">
+              </div>
+              
+              <div class="form-group">
+                <label for="group-contribution"><i class="fas fa-calendar-alt"></i> Monthly Contribution (Ksh)</label>
+                <input id="group-contribution" type="number" class="form-control" placeholder="Monthly contribution per member">
+              </div>
+              
+              <div class="form-actions">
+                <button type="submit" id="submit-group" class="btn-primary">
+                  <i class="fas fa-save"></i> Create Group
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    
+  </div>
+
+
+  
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html> 
+
+
+
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chama Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <h1>Chama Manager</h1>
+  <h3>Welcome, <span id="user-name"></span></h3>
+  <button id="logout">Logout</button>
+
+  <section id="group-section">
+    <h2>Your Groups</h2>
+    <div id="groups-list"></div>
+
+    <button id="show-group-form">Create Group</button>
+
+    <div id="group-form" style="display: none;">
+      <input id="group-name" placeholder="Group Name" />
+      <input id="group-description" placeholder="Description" />
+      <input id="group-goal" placeholder="Goal" />
+      <input id="group-target" placeholder="Target Amount" />
+      <input id="group-contribution" placeholder="Monthly Contribution" />
+      <button id="submit-group">Submit</button>
+    </div>
+  </section>
+
+
+  <section id="contribution-section">
+  <h2>Contribute</h2>
+  <select id="contribution-group-id">
+  <option disabled selected>Select a group</option>
+</select>
+
+  <input id="contribution-amount" placeholder="Amount (Ksh)" type="number" />
+  <input id="contribution-proof" placeholder="Proof (optional)" />
+  <button id="submit-contribution">Submit Contribution</button>
+</section>
+
+<section id="contribution-feed">
+  <h2>Activity Feed</h2>
+  <div id="feed-container"></div>
+</section>
+
+
+
+
+
+<div id="groupsList"></div>
+
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>  -->
