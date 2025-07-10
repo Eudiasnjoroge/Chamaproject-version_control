@@ -1,1 +1,0 @@
-chama project readme
